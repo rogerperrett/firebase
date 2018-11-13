@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+	<title>Australia Map</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Open+Sans|Pacifico|Source+Code+Pro');
+
+	/* FontAwesome cdn fonts */
+
+	@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+	body {
+
+	   font-family: 'Open Sans', sans-serif;
+
+	}
+  #map{
+	   height: 800px;
+	   width: 100%;
+	 }
+	/* Sample styling for comments and commenting controls */
+
+	#allcomments {
+
+	   width: 100%;
+
+	   padding: 1%;
+
+	   border: solid 1px gray;
+
+	   border-radius: 3px;
+
+	   box-shadow: 2px 2px 2px silver;
+
+	}
+
+
+
+	ul#pastcomments {
+
+	   list-style-type: none;
+
+	}
+
+
+
+	ul#pastcomments li:before {
+
+	   font-family: FontAwesome;
+
+	   content: "\f0e5";
+
+	   font-size: 24pt;
+
+	   color: gray;
+
+	   margin-left: -42px;
+
+	   padding-right: 10px;
+
+	   position: relative;
+
+	  top: 8px;
+
+	}
+
+
+
+	ul#pastcomments li {
+
+	   margin: 0 0 2em 0;
+
+	   padding: 10px;
+
+	}
+
+
+
+	ul#pastcomments li span {
+
+	   font-size: 80%;
+
+	   color: gray;
+
+	   font-style: italic;
+
+	}
+
+
+
+	form#newcomment textarea {
+
+	   height: 72px;
+
+	}
+
+
+
+	form#newcomment label {
+
+	   display: inline-block;
+
+	   margin: 1em 0 0 0;
+
+	}
+
+
+
+	form#newcomment textarea,
+
+	form#newcomment input[type="text"] {
+
+	   margin-top: 0;
+
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+			<a class="navbar-brand" href="index.html">Australia</a> <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item" id="dashboard-div">
+						<a class="nav-link" href="dashboard.html">Dashboard <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active" id="map-div">
+						<a class="nav-link" href="map.html">Map</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<div id="map"></div>
+	<script>
+	   function initMap(){
+	     // Map Options
+	     var options = {
+	       zoom: 5,
+	       center:{lat:-25.344,lng:131.036}
+	     }
+
+	     // New Map
+	     var map = new google.maps.Map(document.getElementById('map'), options);
+	/*
+	     // Add Marker
+
+	     var marker = new google.maps.Marker({
+	       position:{lat:-20.2824,lng:149.0389},
+	       map:map,
+	       icon: 'http://maps.google.com/mapfiles/kml/pal4/icon46.png'
+	     });
+	     var infoWindow = new google.maps.InfoWindow({
+	       content:'<img src="images/small-whitehaven.JPG" alt="">'
+	     });
+
+	     marker.addListener('click', function(){
+	       infoWindow.open(map, marker);
+	     })
+	     */
+
+	// Array of Makers
+
+	var markers = [
+	 {
+	   coords:{lat:-20.2824,lng:149.0389},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-whitehaven.JPG" alt="">'
+	 },
+	 {
+	   coords:{lat:-33.856792,lng:151.215138},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-sydneyoperahouse.JPG" alt="">'
+	 },
+	 {
+	   coords:{lat:-33.861944,lng:151.218430},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-sydneyharbour.JPG" alt="">'
+	 },
+	 {
+	   coords:{lat:-33.852865,lng:151.215265},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-sydneyfireworks.JPG" alt="">'
+	 },
+	 {
+	   coords:{lat:-20.232720,lng:149.041109},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-whitesundays.JPG" alt="">'
+	 },
+	 {
+	   coords:{lat:-20.347906,lng:148.976124},
+	   iconImage:'http://maps.google.com/mapfiles/kml/pal4/icon46.png',
+	   content:'<img src="images/small-hamiltonIsland.JPG" alt="">'
+	 }
+	]
+
+	// loop through markers
+
+	for(var i = 0;i < markers.length;i++){
+	 addMarker(markers[i]);
+	 }
+
+
+
+	function addMarker(props){
+	 var marker = new google.maps.Marker({
+	       position:props.coords,
+	       map:map,
+	       icon: props.iconImage
+	     });
+
+	     if(props.iconImage){
+	       marker.setIcon(props.iconImage)
+	     }
+
+	     if(props.content) {
+	       var infoWindow = new google.maps.InfoWindow({
+	       content:props.content
+	     });
+
+	     marker.addListener('click', function(){
+	       infoWindow.open(map, marker);
+	     });
+	   }
+	 }
+	}
+	</script> 
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArW6_CETy3J6QzOkrutAE3x-RXprVBOUw&callback=initMap">
+	</script>
+	<div class="text-center">
+		<p>zoom in and click on <img alt="" src="http://maps.google.com/mapfiles/kml/pal4/icon46.png"> to see images</p>
+	</div>
+	<div id="allcomments">
+		<h3>Comments</h3><!-- We will show past comments in the list below-->
+		<ul id="pastcomments"></ul><!-- This is the form for entering a new comment -->
+		<form id="newcomment" name="newcomment">
+			<label for="tbName">First Name or Initials</label><br>
+			<input id="tbName" maxlength="20" required="" type="text"><br>
+			<label for="txComment">Your Comment / Question</label><br>
+			<textarea id="txComment" maxlength="4096" required="" style="width:96%"></textarea><br>
+			<input id="btnSubmitComment" type="submit" value="Submit Comment">
+		</form>
+	</div><!-- Connection to Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js">
+	</script> 
+	<script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-database.js">
+	</script> 
+	<script>
+	   
+	           // Initialize Firebase - be sure to use your own code, this connects to my database.
+	   
+	           // Initialize Firebase
+	   
+	           var config = {
+	   
+	       apiKey: "AIzaSyDwST4X4t8TQeFHxcYQaC7MkHD6YUKnTZw",
+	   
+	       authDomain: "comments-9fc3e.firebaseapp.com",
+	   
+	       databaseURL: "https://comments-9fc3e.firebaseio.com",
+	   
+	       projectId: "comments-9fc3e",
+	   
+	       storageBucket: "comments-9fc3e.appspot.com",
+	   
+	       messagingSenderId: "461180370762"
+	   
+	           };
+	   
+	           firebase.initializeApp(config);
+	   
+	           //Rootref is the whole database.
+	   
+	           const rootRef = firebase.database().ref();
+	   
+	           //commentsRef is just the pageCountsNode
+	   
+	           const commentsRef = rootRef.child('comments');
+	   
+	           //Listen for click on Submit Comment button, and post comment.
+	   
+	           document.getElementById("btnSubmitComment").addEventListener("click", function () {
+	   
+	               //Replace line breaks in comment with br tags.
+	   
+	               var newcomment = document.getElementById('txComment').value.replace(/\n/g, "<br>");
+	   
+	               //Define a new, keyed post.
+	   
+	               var newPostRef = commentsRef.push();
+	   
+	               //Fill tne new keyed post with data
+	   
+	               newPostRef.set({
+	   
+	                   name: document.getElementById('tbName').value.trim(),
+	   
+	                   comment: newcomment.trim(),
+	   
+	                   frompage: location.pathname,
+	   
+	                   when: firebase.database.ServerValue.TIMESTAMP
+	   
+	               });
+	   
+	           });
+	   
+	    
+	   
+	           function showpastcomments() {
+	   
+	               var showat = document.getElementById('pastcomments');
+	   
+	               //Get comments whose from page equals this page's pathname.
+	   
+	               var commentsRef = firebase.database().ref('comments/').orderByChild('frompage').equalTo(location.pathname);
+	   
+	               commentsRef.once('value', function (snapshot) {
+	   
+	                   snapshot.forEach(function (itemSnapshot) {
+	   
+	                       //Get the object for one snapshot
+	   
+	                       var itemData = itemSnapshot.val();
+	   
+	                       var comment = itemData.comment;
+	   
+	                       var name = itemData.name;
+	   
+	                       var when = new Date(itemData.when).toLocaleDateString("en-us");
+	   
+	                       showat.innerHTML += "<li><span> -- " + name + " (" + when +
+	   
+	                           ")<\/span> <br>" + comment + "<\/li>";
+	   
+	                   })
+	   
+	               })
+	   
+	           }
+	   
+	           //Called when page first opens and also after Submit button click to show all comments for this page.
+	   
+	           showpastcomments()
+	   
+	</script>
+</body>
+</html>
